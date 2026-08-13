@@ -77,7 +77,7 @@ Screenshots of the desktop, tablet, mobile and contact form views are included a
 
 ![Tablet View](screenshots/tablet.png)
 
-### Mobile View
+### Project View
 
 ![Project View](screenshots/mobile.png)
 
