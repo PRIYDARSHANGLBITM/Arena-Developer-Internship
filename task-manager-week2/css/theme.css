@@ -1,81 +1,406 @@
 /* =========================================
-   DARK MODE
+   TASKFLOW - DARK / LIGHT THEME
+========================================= */
+
+
+/* =========================================
+   DARK MODE VARIABLES
 ========================================= */
 
 body.dark {
-    --background: #0f172a;
 
-    --card: #1e293b;
+    --background: #0b1120;
 
-    --text: #f1f5f9;
+    --card: #111827;
+
+    --text: #f8fafc;
 
     --muted: #94a3b8;
 
-    --border: #334155;
+    --border: #263244;
+
+    --primary: #818cf8;
+
+    --primary-dark: #6366f1;
+
+    --secondary: #a78bfa;
+
+    --success: #34d399;
+
+    --danger: #f87171;
+
+    --warning: #fbbf24;
 }
 
+
+/* =========================================
+   DARK MODE BODY
+========================================= */
 
 body.dark {
+
     background:
+
         radial-gradient(
-            circle at top left,
-            #1e1b4b,
-            transparent 35%
+            circle at 0% 0%,
+            rgba(79, 70, 229, 0.20),
+            transparent 30%
         ),
+
         radial-gradient(
-            circle at bottom right,
-            #312e81,
-            transparent 35%
+            circle at 100% 100%,
+            rgba(124, 58, 237, 0.18),
+            transparent 30%
         ),
-        #0f172a;
+
+        #0b1120;
+
+    color: var(--text);
 }
 
 
-/* Input */
+/* =========================================
+   HEADER
+========================================= */
+
+body.dark .subtitle {
+
+    color: #a5b4fc;
+}
+
+
+body.dark .header-description {
+
+    color: #94a3b8;
+}
+
+
+/* =========================================
+   CARDS
+========================================= */
+
+body.dark .task-input-section,
+body.dark .stat-card,
+body.dark .progress-section,
+body.dark .task-item,
+body.dark .filters,
+body.dark .clear-btn {
+
+    background: #111827;
+
+    border-color: #263244;
+}
+
+
+/* =========================================
+   THEME BUTTON
+========================================= */
+
+body.dark .theme-btn {
+
+    background: #111827;
+
+    color: #f8fafc;
+
+    border-color: #334155;
+
+    box-shadow:
+        0 8px 25px
+        rgba(0, 0, 0, 0.35);
+}
+
+
+body.dark .theme-btn:hover {
+
+    box-shadow:
+        0 12px 30px
+        rgba(0, 0, 0, 0.45);
+}
+
+
+/* =========================================
+   INPUT
+========================================= */
 
 body.dark #taskInput {
-    background: #0f172a;
 
-    color: #f1f5f9;
+    background: #0b1120;
+
+    color: #f8fafc;
 
     border-color: #334155;
 }
 
+
 body.dark #taskInput::placeholder {
+
     color: #64748b;
 }
 
 
-/* Filter Hover */
+body.dark #taskInput:focus {
+
+    border-color: #818cf8;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(129, 140, 248, 0.12);
+}
+
+
+/* =========================================
+   SELECT INPUTS
+========================================= */
+
+body.dark .option-group select,
+body.dark .option-group input {
+
+    background: #0b1120;
+
+    color: #f8fafc;
+
+    border-color: #334155;
+}
+
+
+body.dark .option-group select:focus,
+body.dark .option-group input:focus {
+
+    border-color: #818cf8;
+}
+
+
+/* =========================================
+   SEARCH
+========================================= */
+
+body.dark .search-box input {
+
+    background: #111827;
+
+    color: #f8fafc;
+
+    border-color: #334155;
+}
+
+
+body.dark .search-box input::placeholder {
+
+    color: #64748b;
+}
+
+
+body.dark .search-box input:focus {
+
+    border-color: #818cf8;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(129, 140, 248, 0.12);
+}
+
+
+/* =========================================
+   SEARCH SHORTCUT
+========================================= */
+
+body.dark .search-shortcut {
+
+    background: #1e293b;
+
+    border-color: #334155;
+
+    color: #94a3b8;
+}
+
+
+/* =========================================
+   SORT
+========================================= */
+
+body.dark .sort-box select {
+
+    background: #111827;
+
+    color: #f8fafc;
+
+    border-color: #334155;
+}
+
+
+/* =========================================
+   FILTERS
+========================================= */
+
+body.dark .filter-btn {
+
+    color: #94a3b8;
+}
+
 
 body.dark .filter-btn:hover {
-    background: #312e81;
+
+    background: #1e1b4b;
 
     color: #c7d2fe;
 }
 
 
-/* Clear button */
+body.dark .filter-btn.active {
+
+    color: white;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #6366f1,
+            #8b5cf6
+        );
+}
+
+
+/* Filter Count */
+
+body.dark .filter-btn span {
+
+    background:
+        rgba(255, 255, 255, 0.08);
+}
+
+
+body.dark .filter-btn.active span {
+
+    background:
+        rgba(255, 255, 255, 0.20);
+}
+
+
+/* =========================================
+   STAT ICONS
+========================================= */
+
+body.dark .stat-icon {
+
+    background: #1e1b4b;
+}
+
+
+/* =========================================
+   PROGRESS BAR
+========================================= */
+
+body.dark .progress-bar {
+
+    background: #1e293b;
+}
+
+
+body.dark .progress-fill {
+
+    background:
+
+        linear-gradient(
+            90deg,
+            #6366f1,
+            #a78bfa
+        );
+}
+
+
+/* =========================================
+   TASK ITEMS
+========================================= */
+
+body.dark .task-item {
+
+    box-shadow:
+        0 5px 18px
+        rgba(0, 0, 0, 0.20);
+}
+
+
+body.dark .task-item:hover {
+
+    box-shadow:
+        0 12px 28px
+        rgba(0, 0, 0, 0.35);
+}
+
+
+/* =========================================
+   TASK TEXT
+========================================= */
+
+body.dark .task-text {
+
+    color: #f8fafc;
+}
+
+
+body.dark .task-item.completed .task-text {
+
+    color: #64748b;
+}
+
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+body.dark .empty-message {
+
+    background:
+        rgba(15, 23, 42, 0.45);
+
+    border-color: #334155;
+}
+
+
+body.dark .empty-message h3 {
+
+    color: #f8fafc;
+}
+
+
+/* =========================================
+   CLEAR COMPLETED
+========================================= */
+
+body.dark .clear-btn {
+
+    color: #94a3b8;
+}
+
 
 body.dark .clear-btn:hover {
+
     background: #450a0a;
+
+    color: #fca5a5;
 
     border-color: #7f1d1d;
 }
 
 
-/* Task hover */
+/* =========================================
+   FOOTER
+========================================= */
 
-body.dark .task-item:hover {
-    box-shadow:
-        0 10px 25px rgba(0, 0, 0, 0.25);
+body.dark .footer {
+
+    color: #64748b;
 }
 
 
-/* Theme Button */
+/* =========================================
+   ACCESSIBILITY
+========================================= */
 
-body.dark .theme-btn {
-    background: #1e293b;
+body.dark button:focus-visible,
+body.dark input:focus-visible,
+body.dark select:focus-visible {
 
-    border-color: #334155;
+    outline-color:
+        rgba(129, 140, 248, 0.35);
 }

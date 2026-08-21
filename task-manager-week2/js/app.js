@@ -1,20 +1,24 @@
 // ==========================================
-// TASK MANAGER - MAIN JAVASCRIPT
+// TASKFLOW - MAIN APPLICATION
 // ==========================================
 
 
-// ------------------------------------------
-// 1. Application State
-// ------------------------------------------
+// ==========================================
+// 1. APPLICATION STATE
+// ==========================================
 
 let tasks = loadTasks();
 
 let currentFilter = "all";
 
+let currentSearch = "";
 
-// ------------------------------------------
-// 2. Select HTML Elements
-// ------------------------------------------
+let currentSort = "newest";
+
+
+// ==========================================
+// 2. HTML ELEMENTS
+// ==========================================
 
 const taskForm =
     document.getElementById("taskForm");
@@ -37,332 +41,777 @@ const clearCompletedButton =
 const themeToggle =
     document.getElementById("themeToggle");
 
+const searchInput =
+    document.getElementById("searchInput");
 
-// ------------------------------------------
-// 3. ADD TASK
-// ------------------------------------------
-
-taskForm.addEventListener("submit", function (event) {
-
-    // Page reload hone se rokta hai
-    event.preventDefault();
+const sortSelect =
+    document.getElementById("sortSelect");
 
 
-    // Input ki value lena
-    const text = taskInput.value.trim();
+// ==========================================
+// 3. INITIALIZE APPLICATION
+// ==========================================
 
+function initApp() {
 
-    // Validation
-    if (text === "") {
+    loadTheme();
 
-        errorMessage.textContent =
-            "Please enter a task.";
+    refreshUI();
 
-        return;
+    if (taskInput) {
+        taskInput.focus();
     }
+}
 
 
-    // Error message remove
-    errorMessage.textContent = "";
+// ==========================================
+// 4. REFRESH COMPLETE UI
+// ==========================================
 
+function refreshUI() {
 
-    // New task object
-    const newTask = {
-
-        id: generateId(),
-
-        text: text,
-
-        completed: false,
-
-        createdAt:
-            new Date().toISOString()
-
-    };
-
-
-    // Task array me add
-    tasks.push(newTask);
-
-
-    // localStorage me save
-    saveTasks(tasks);
-
-
-    // Input clear
-    taskInput.value = "";
-
-
-    // Screen update
     renderTasks(
         tasks,
+        currentFilter,
+        currentSearch,
+        currentSort
+    );
+
+    updateFilterButtons(
         currentFilter
     );
 
-});
+    updateFilterCounts(
+        tasks
+    );
+
+    updateEmptyMessage(
+        currentFilter,
+        currentSearch
+    );
+
+    updateProgress(
+        tasks
+    );
+}
 
 
-// ------------------------------------------
-// 4. DELETE + EDIT TASK
-// ------------------------------------------
+// ==========================================
+// 5. ADD TASK
+// ==========================================
 
-taskList.addEventListener("click", function (event) {
+if (taskForm) {
 
-    const button =
-        event.target.closest("button");
+    taskForm.addEventListener(
+        "submit",
+        function (event) {
+
+            event.preventDefault();
 
 
-    // Agar button nahi hai
-    if (!button) {
+            const text =
+                taskInput.value.trim();
+
+
+            // Validation
+            const validation =
+                validateTaskText(text);
+
+
+            if (!validation.valid) {
+
+                showError(
+                    validation.message
+                );
+
+                return;
+            }
+
+
+            clearError();
+
+
+            // Get priority
+            const priorityElement =
+                document.getElementById(
+                    "prioritySelect"
+                );
+
+
+            const priority =
+                priorityElement
+                    ? priorityElement.value
+                    : "medium";
+
+
+            // Get category
+            const categoryElement =
+                document.getElementById(
+                    "categorySelect"
+                );
+
+
+            const category =
+                categoryElement
+                    ? categoryElement.value
+                    : "personal";
+
+
+            // Get due date
+            const dueDateElement =
+                document.getElementById(
+                    "dueDate"
+                );
+
+
+            const dueDate =
+                dueDateElement
+                    ? dueDateElement.value
+                    : "";
+
+
+            // Create task
+            const newTask =
+                createTask(
+                    text,
+                    priority,
+                    category,
+                    dueDate
+                );
+
+
+            // Add task
+            tasks.push(newTask);
+
+
+            // Save
+            saveTasks(tasks);
+
+
+            // Reset form
+            taskForm.reset();
+
+
+            // Refresh UI
+            refreshUI();
+
+
+            // Success message
+            showToast(
+                "Task added successfully! 🎉",
+                "success"
+            );
+
+
+            // Focus input
+            taskInput.focus();
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// 6. TASK BUTTON EVENTS
+// ==========================================
+
+if (taskList) {
+
+    taskList.addEventListener(
+        "click",
+        function (event) {
+
+            const button =
+                event.target.closest(
+                    "button"
+                );
+
+
+            if (!button) {
+                return;
+            }
+
+
+            const action =
+                button.dataset.action;
+
+
+            const id =
+                button.dataset.id;
+
+
+            // EDIT
+            if (action === "edit") {
+
+                editTask(id);
+
+                return;
+            }
+
+
+            // DELETE
+            if (action === "delete") {
+
+                deleteTask(id);
+
+                return;
+            }
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// 7. COMPLETE / INCOMPLETE
+// ==========================================
+
+if (taskList) {
+
+    taskList.addEventListener(
+        "change",
+        function (event) {
+
+            if (
+                event.target.dataset.action !==
+                "complete"
+            ) {
+                return;
+            }
+
+
+            const id =
+                event.target.dataset.id;
+
+
+            toggleTask(id);
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// 8. EDIT TASK
+// ==========================================
+
+function editTask(id) {
+
+    const task =
+        tasks.find(
+            task =>
+                String(task.id) ===
+                String(id)
+        );
+
+
+    if (!task) {
         return;
     }
 
 
-    const action =
-        button.dataset.action;
-
-
-    const id =
-        Number(button.dataset.id);
-
-
-    // --------------------------------------
-    // DELETE TASK
-    // --------------------------------------
-
-    if (action === "delete") {
-
-        tasks =
-            tasks.filter(
-                task => task.id !== id
-            );
-
-
-        saveTasks(tasks);
-
-
-        renderTasks(
-            tasks,
-            currentFilter
+    const updatedText =
+        prompt(
+            "Edit your task:",
+            task.text
         );
+
+
+    // Cancel
+    if (updatedText === null) {
+        return;
     }
 
 
-    // --------------------------------------
-    // EDIT TASK
-    // --------------------------------------
-
-    if (action === "edit") {
-
-        const task =
-            tasks.find(
-                task => task.id === id
-            );
-
-
-        if (!task) {
-            return;
-        }
-
-
-        // User se new task lena
-        const updatedText =
-            prompt(
-                "Edit your task:",
-                task.text
-            );
-
-
-        // Cancel press kiya
-        if (updatedText === null) {
-            return;
-        }
-
-
-        // Empty task prevent
-        if (updatedText.trim() === "") {
-
-            alert(
-                "Task cannot be empty."
-            );
-
-            return;
-        }
-
-
-        // Task update
-        task.text =
-            updatedText.trim();
-
-
-        // Save
-        saveTasks(tasks);
-
-
-        // UI update
-        renderTasks(
-            tasks,
-            currentFilter
+    // Validate
+    const validation =
+        validateTaskText(
+            updatedText
         );
+
+
+    if (!validation.valid) {
+
+        showToast(
+            validation.message,
+            "error"
+        );
+
+        return;
     }
 
-});
+
+    // Update task
+    task.text =
+        updatedText.trim();
 
 
-// ------------------------------------------
-// 5. COMPLETE / INCOMPLETE TASK
-// ------------------------------------------
-
-taskList.addEventListener(
-    "change",
-    function (event) {
-
-        // Check karo checkbox hai ya nahi
-        if (
-            event.target.dataset.action !==
-            "complete"
-        ) {
-            return;
-        }
+    // Save
+    saveTasks(tasks);
 
 
-        const id =
-            Number(
-                event.target.dataset.id
-            );
+    // Refresh
+    refreshUI();
 
 
-        // Task update
-        tasks =
-            tasks.map(function (task) {
+    showToast(
+        "Task updated successfully! ✏️",
+        "success"
+    );
 
-                if (task.id === id) {
+}
+
+
+// ==========================================
+// 9. DELETE TASK
+// ==========================================
+
+function deleteTask(id) {
+
+    const task =
+        tasks.find(
+            task =>
+                String(task.id) ===
+                String(id)
+        );
+
+
+    if (!task) {
+        return;
+    }
+
+
+    const confirmed =
+        confirm(
+            `Delete "${task.text}"?`
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    tasks =
+        tasks.filter(
+            task =>
+                String(task.id) !==
+                String(id)
+        );
+
+
+    saveTasks(tasks);
+
+
+    refreshUI();
+
+
+    showToast(
+        "Task deleted successfully.",
+        "success"
+    );
+
+}
+
+
+// ==========================================
+// 10. TOGGLE COMPLETE
+// ==========================================
+
+function toggleTask(id) {
+
+    let completedTask = false;
+
+
+    tasks =
+        tasks.map(
+            function (task) {
+
+                if (
+                    String(task.id) ===
+                    String(id)
+                ) {
+
+                    completedTask =
+                        !task.completed;
+
 
                     return {
+
                         ...task,
 
                         completed:
-                            !task.completed
+                            completedTask
+
                     };
                 }
 
 
                 return task;
 
-            });
+            }
+        );
 
 
-        // Save
-        saveTasks(tasks);
+    saveTasks(tasks);
 
 
-        // Screen update
-        renderTasks(
-            tasks,
-            currentFilter
+    refreshUI();
+
+
+    if (completedTask) {
+
+        showToast(
+            "🎉 Task completed!",
+            "success"
+        );
+
+    } else {
+
+        showToast(
+            "Task marked as active.",
+            "success"
+        );
+
+    }
+
+}
+
+
+// ==========================================
+// 11. FILTER BUTTONS
+// ==========================================
+
+filterButtons.forEach(
+    function (button) {
+
+        button.addEventListener(
+            "click",
+            function () {
+
+                currentFilter =
+                    this.dataset.filter;
+
+
+                refreshUI();
+
+            }
         );
 
     }
 );
 
 
-// ------------------------------------------
-// 6. FILTER TASKS
-// ------------------------------------------
+// ==========================================
+// 12. SEARCH
+// ==========================================
 
-filterButtons.forEach(function (button) {
+if (searchInput) {
 
-    button.addEventListener(
+    searchInput.addEventListener(
+        "input",
+        function () {
+
+            currentSearch =
+                this.value.trim();
+
+
+            refreshUI();
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// 13. SORT
+// ==========================================
+
+if (sortSelect) {
+
+    sortSelect.addEventListener(
+        "change",
+        function () {
+
+            currentSort =
+                this.value;
+
+
+            refreshUI();
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// 14. CLEAR COMPLETED TASKS
+// ==========================================
+
+if (clearCompletedButton) {
+
+    clearCompletedButton.addEventListener(
         "click",
         function () {
 
-            // Sab buttons se active remove
-            filterButtons.forEach(
-                function (btn) {
-
-                    btn.classList.remove(
-                        "active"
-                    );
-
-                }
-            );
+            const completedCount =
+                tasks.filter(
+                    task =>
+                        task.completed
+                ).length;
 
 
-            // Current button active
-            this.classList.add("active");
+            // Nothing completed
+            if (completedCount === 0) {
+
+                showToast(
+                    "No completed tasks to clear.",
+                    "warning"
+                );
+
+                return;
+            }
 
 
-            // Filter value
-            currentFilter =
-                this.dataset.filter;
+            // Confirmation
+            const confirmed =
+                confirm(
+                    `Clear ${completedCount} completed task(s)?`
+                );
 
 
-            // Tasks display
-            renderTasks(
-                tasks,
-                currentFilter
+            if (!confirmed) {
+                return;
+            }
+
+
+            // Remove completed tasks
+            tasks =
+                tasks.filter(
+                    task =>
+                        !task.completed
+                );
+
+
+            // Save
+            saveTasks(tasks);
+
+
+            // Refresh
+            refreshUI();
+
+
+            showToast(
+                "Completed tasks cleared.",
+                "success"
             );
 
         }
     );
 
-});
+}
 
 
-// ------------------------------------------
-// 7. CLEAR COMPLETED TASKS
-// ------------------------------------------
+// ==========================================
+// 15. DARK / LIGHT MODE
+// ==========================================
 
-clearCompletedButton.addEventListener(
-    "click",
-    function () {
+if (themeToggle) {
 
-        tasks =
-            tasks.filter(
-                task => !task.completed
-            );
+    themeToggle.addEventListener(
+        "click",
+        function () {
 
-
-        // Save
-        saveTasks(tasks);
-
-
-        // Update UI
-        renderTasks(
-            tasks,
-            currentFilter
-        );
-
-    }
-);
-
-
-// ------------------------------------------
-// 8. DARK / LIGHT MODE
-// ------------------------------------------
-
-themeToggle.addEventListener(
-    "click",
-    function () {
-
-        document.body.classList.toggle(
-            "dark"
-        );
-
-
-        const isDark =
-            document.body.classList.contains(
+            document.body.classList.toggle(
                 "dark"
             );
 
 
-        if (isDark) {
+            const isDark =
+                document.body.classList.contains(
+                    "dark"
+                );
 
-            themeToggle.textContent = "☀️";
 
-        } else {
+            themeToggle.textContent =
+                isDark
+                    ? "☀️"
+                    : "🌙";
 
-            themeToggle.textContent = "🌙";
+
+            localStorage.setItem(
+                "week2_theme",
+                isDark
+                    ? "dark"
+                    : "light"
+            );
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// 16. LOAD SAVED THEME
+// ==========================================
+
+function loadTheme() {
+
+    const savedTheme =
+        localStorage.getItem(
+            "week2_theme"
+        );
+
+
+    if (savedTheme === "dark") {
+
+        document.body.classList.add(
+            "dark"
+        );
+
+
+        if (themeToggle) {
+
+            themeToggle.textContent =
+                "☀️";
+
+        }
+
+    } else {
+
+        document.body.classList.remove(
+            "dark"
+        );
+
+
+        if (themeToggle) {
+
+            themeToggle.textContent =
+                "🌙";
+
+        }
+
+    }
+
+}
+
+
+// ==========================================
+// 17. ERROR MESSAGE
+// ==========================================
+
+function showError(message) {
+
+    if (!errorMessage) {
+        return;
+    }
+
+
+    errorMessage.textContent =
+        message;
+
+
+    errorMessage.style.display =
+        "block";
+
+
+    if (taskInput) {
+        taskInput.focus();
+    }
+
+}
+
+
+function clearError() {
+
+    if (!errorMessage) {
+        return;
+    }
+
+
+    errorMessage.textContent = "";
+
+
+    errorMessage.style.display =
+        "none";
+
+}
+
+
+// ==========================================
+// 18. KEYBOARD SHORTCUTS
+// ==========================================
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+
+
+        // Ctrl + K
+        // Focus search
+
+        if (
+            event.ctrlKey &&
+            event.key.toLowerCase() === "k"
+        ) {
+
+            event.preventDefault();
+
+
+            if (searchInput) {
+
+                searchInput.focus();
+
+            }
+
+        }
+
+
+        // Escape
+        // Clear search
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            if (
+                document.activeElement ===
+                searchInput
+            ) {
+
+                searchInput.value = "";
+
+                currentSearch = "";
+
+                refreshUI();
+
+            }
+
+        }
+
+
+        // Ctrl + Enter
+        // Add task
+
+        if (
+            event.ctrlKey &&
+            event.key === "Enter"
+        ) {
+
+            if (
+                document.activeElement ===
+                taskInput
+            ) {
+
+                taskForm.requestSubmit();
+
+            }
 
         }
 
@@ -370,11 +819,8 @@ themeToggle.addEventListener(
 );
 
 
-// ------------------------------------------
-// 9. LOAD TASKS WHEN PAGE OPENS
-// ------------------------------------------
+// ==========================================
+// 19. START APPLICATION
+// ==========================================
 
-renderTasks(
-    tasks,
-    currentFilter
-);
+initApp();
