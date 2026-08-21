@@ -23,7 +23,7 @@ https://YOUR-LIVE-DEMO-LINK.com
 
 ### 🌙 Dark Mode
 
-![TaskFlow Dark Mode](screenshots/Dark-mode.png)
+![TaskFlow Dark Mode](screenshots/dark-mode.png)
 
 ### 📱 Mobile Responsive View
 
