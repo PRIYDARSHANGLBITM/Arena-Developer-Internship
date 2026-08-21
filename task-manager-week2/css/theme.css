@@ -1,0 +1,81 @@
+/* =========================================
+   DARK MODE
+========================================= */
+
+body.dark {
+    --background: #0f172a;
+
+    --card: #1e293b;
+
+    --text: #f1f5f9;
+
+    --muted: #94a3b8;
+
+    --border: #334155;
+}
+
+
+body.dark {
+    background:
+        radial-gradient(
+            circle at top left,
+            #1e1b4b,
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at bottom right,
+            #312e81,
+            transparent 35%
+        ),
+        #0f172a;
+}
+
+
+/* Input */
+
+body.dark #taskInput {
+    background: #0f172a;
+
+    color: #f1f5f9;
+
+    border-color: #334155;
+}
+
+body.dark #taskInput::placeholder {
+    color: #64748b;
+}
+
+
+/* Filter Hover */
+
+body.dark .filter-btn:hover {
+    background: #312e81;
+
+    color: #c7d2fe;
+}
+
+
+/* Clear button */
+
+body.dark .clear-btn:hover {
+    background: #450a0a;
+
+    border-color: #7f1d1d;
+}
+
+
+/* Task hover */
+
+body.dark .task-item:hover {
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.25);
+}
+
+
+/* Theme Button */
+
+body.dark .theme-btn {
+    background: #1e293b;
+
+    border-color: #334155;
+}

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Task Manager</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/theme.css">
+
+</head>
+
+<body>
+
+    <main class="container">
+
+        <!-- Header -->
+
+        <header class="header">
+
+            <div>
+                <p class="subtitle">Stay Organized</p>
+                <h1>📝 Task Manager</h1>
+            </div>
+
+            <button
+                id="themeToggle"
+                class="theme-btn"
+                type="button"
+            >
+                🌙
+            </button>
+
+        </header>
+
+
+        <!-- Add Task Form -->
+
+        <section class="task-input-section">
+
+            <form id="taskForm">
+
+                <div class="input-group">
+
+                    <input
+                        type="text"
+                        id="taskInput"
+                        placeholder="Enter a task..."
+                        autocomplete="off"
+                    >
+
+                    <button
+                        type="submit"
+                        class="add-btn"
+                    >
+                        Add Task
+                    </button>
+
+                </div>
+
+                <p
+                    id="errorMessage"
+                    class="error-message"
+                ></p>
+
+            </form>
+
+        </section>
+
+
+        <!-- Filters -->
+
+        <section class="filters">
+
+            <button
+                class="filter-btn active"
+                data-filter="all"
+            >
+                All
+            </button>
+
+            <button
+                class="filter-btn"
+                data-filter="active"
+            >
+                Active
+            </button>
+
+            <button
+                class="filter-btn"
+                data-filter="completed"
+            >
+                Completed
+            </button>
+
+        </section>
+
+
+        <!-- Task List -->
+
+        <section>
+
+            <ul
+                id="taskList"
+                class="task-list"
+            >
+            </ul>
+
+            <p
+                id="emptyMessage"
+                class="empty-message"
+            >
+                No tasks yet. Add your first task!
+            </p>
+
+        </section>
+
+
+        <!-- Statistics -->
+
+        <section class="stats">
+
+            <div class="stat-card">
+
+                <span id="totalTasks">0</span>
+
+                <p>Total</p>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span id="activeTasks">0</span>
+
+                <p>Active</p>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span id="completedTasks">0</span>
+
+                <p>Completed</p>
+
+            </div>
+
+        </section>
+
+
+        <!-- Clear Completed -->
+
+        <div class="actions">
+
+            <button
+                id="clearCompleted"
+                class="clear-btn"
+                type="button"
+            >
+                Clear Completed
+            </button>
+
+        </div>
+
+    </main>
+
+
+    <script src="js/storage.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/app.js"></script>
+
+</body>
+
+</html>
