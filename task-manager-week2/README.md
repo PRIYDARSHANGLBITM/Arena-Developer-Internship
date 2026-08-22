@@ -6,15 +6,6 @@ TaskFlow helps users organize daily tasks, track progress, search and sort tasks
 
 ---
 
-## 🌐 Live Demo
-
-🔗 **Live Demo:**  
-https://YOUR-LIVE-DEMO-LINK.com
-
-> Replace the above link with your GitHub Pages / Netlify / Vercel deployment link.
-
----
-
 ## 📸 Screenshots
 
 ### 🖥️ Desktop View
