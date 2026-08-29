@@ -1,0 +1,19 @@
+# Java
+*.class
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+
+# Build directories
+target/
+bin/
+out/
+
+# Operating System
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
