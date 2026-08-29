@@ -420,38 +420,38 @@ The application was tested using different scenarios.
 
 ## 🏠 Main Menu
 
-![Main Menu](screenshots/01-main-menu.png)
+![Main Menu](Screenshots/01-main-menu.png)
 
 ---
 
 ## 📚 View All Books
 
-![View Books](screenshots/02-view-books.png)
+![View Books](Screenshots/02-view-books.png)
 
 ---
 
 ## 👤 Register Member
 
-![Register Member](screenshots/03-register-member.png)
+![Register Member](Screenshots/03-register-member.png)
 
 ---
 
 ## 🔍 Search Book
 
-![Search Book](screenshots/04-search-book.png)
+![Search Book](Screenshots/04-search-book.png)
 
 
 ---
 
 ## 📊 Library Statistics
 
-![Library Statistics](screenshots/05-statistics.png)
+![Library Statistics](Screenshots/05-statistics.png)
 
 ---
 
 ## 📤 CSV Export
 
-![CSV Export](screenshots/06-csv-export.png)
+![CSV Export](Screenshots/06-csv-export.png)
 
 ---
 
