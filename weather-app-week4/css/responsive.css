@@ -1,0 +1,355 @@
+/* =========================================
+   RESPONSIVE DESIGN
+========================================= */
+
+
+/* =========================================
+   TABLET AND SMALL LAPTOP
+========================================= */
+
+@media screen and (max-width: 1024px) {
+
+    .app-container {
+        width: min(92%, 900px);
+    }
+
+    .forecast-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .details-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media screen and (max-width: 768px) {
+
+    /* HEADER */
+
+    .app-header {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 20px;
+    }
+
+    .header-actions {
+        align-self: flex-end;
+    }
+
+
+    /* SEARCH */
+
+    .search-section {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .location-button {
+        width: 100%;
+    }
+
+
+    /* CURRENT WEATHER */
+
+    .current-weather-card {
+        padding: 30px;
+    }
+
+    .weather-main {
+        margin-top: 35px;
+    }
+
+    .temperature {
+        font-size: 65px;
+    }
+
+    .weather-city {
+        font-size: 28px;
+    }
+
+
+    /* DETAILS */
+
+    .details-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+
+    /* FORECAST */
+
+    .forecast-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+
+    /* SECTION CARDS */
+
+    .weather-details-section,
+    .forecast-section,
+    .favorites-section,
+    .history-section {
+        padding: 25px;
+    }
+
+}
+
+
+/* =========================================
+   MOBILE DEVICES
+========================================= */
+
+@media screen and (max-width: 480px) {
+
+    /* MAIN CONTAINER */
+
+    .app-container {
+        width: 92%;
+
+        padding-top: 20px;
+    }
+
+
+    /* LOGO */
+
+    .logo {
+        gap: 10px;
+    }
+
+    .logo-icon {
+        font-size: 38px;
+    }
+
+    .logo h1 {
+        font-size: 22px;
+    }
+
+    .logo p {
+        font-size: 12px;
+    }
+
+
+    /* HEADER BUTTONS */
+
+    .unit-toggle,
+    .theme-toggle {
+        width: 42px;
+        height: 42px;
+
+        font-size: 16px;
+    }
+
+
+    /* SEARCH */
+
+    .search-container {
+        flex-direction: column;
+
+        padding: 8px;
+
+        gap: 8px;
+    }
+
+    #searchInput {
+        width: 100%;
+
+        padding: 14px;
+    }
+
+    .search-button {
+        width: 100%;
+
+        padding: 14px;
+    }
+
+    .location-button {
+        padding: 14px;
+    }
+
+
+    /* CURRENT WEATHER */
+
+    .current-weather-card {
+        padding: 25px 20px;
+
+        min-height: auto;
+    }
+
+    .weather-location {
+        flex-direction: column;
+
+        gap: 15px;
+    }
+
+    .favorite-button {
+        align-self: flex-start;
+    }
+
+    .weather-main {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 25px;
+    }
+
+    .temperature {
+        font-size: 60px;
+    }
+
+    .weather-condition {
+        text-align: left;
+    }
+
+    .weather-icon {
+        font-size: 55px;
+    }
+
+
+    /* DEFAULT WEATHER */
+
+    .default-weather {
+        height: 220px;
+    }
+
+    .default-icon {
+        font-size: 65px;
+    }
+
+    .default-weather h2 {
+        font-size: 24px;
+    }
+
+
+    /* DETAILS */
+
+    .details-grid {
+        grid-template-columns: 1fr;
+
+        gap: 12px;
+    }
+
+    .detail-card {
+        padding: 15px;
+    }
+
+
+    /* FORECAST */
+
+    .forecast-container {
+        grid-template-columns: repeat(2, 1fr);
+
+        gap: 10px;
+    }
+
+    .forecast-day {
+        padding: 15px 8px;
+    }
+
+
+    /* SECTIONS */
+
+    .weather-details-section,
+    .forecast-section,
+    .favorites-section,
+    .history-section {
+        padding: 20px;
+    }
+
+    .section-header {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+    }
+
+
+    /* FAVORITES & HISTORY */
+
+    .favorites-container,
+    .history-container {
+        gap: 8px;
+    }
+
+    .favorite-city,
+    .history-city {
+        padding: 10px 14px;
+
+        font-size: 13px;
+    }
+
+
+    /* FOOTER */
+
+    .app-footer {
+        margin-top: 30px;
+
+        font-size: 12px;
+    }
+
+    .footer-info {
+        font-size: 11px;
+    }
+
+}
+
+
+/* =========================================
+   VERY SMALL MOBILE DEVICES
+========================================= */
+
+@media screen and (max-width: 360px) {
+
+    .logo h1 {
+        font-size: 19px;
+    }
+
+    .temperature {
+        font-size: 52px;
+    }
+
+    .forecast-container {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* =========================================
+   LARGE DESKTOP SCREENS
+========================================= */
+
+@media screen and (min-width: 1400px) {
+
+    .app-container {
+        width: 1250px;
+    }
+
+}
+
+
+/* =========================================
+   LANDSCAPE MOBILE
+========================================= */
+
+@media screen and (max-height: 600px)
+and (orientation: landscape) {
+
+    .app-container {
+        padding-top: 15px;
+    }
+
+    .current-weather-card {
+        min-height: 250px;
+    }
+
+}

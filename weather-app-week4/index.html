@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="A responsive weather application with real-time weather data and 5-day forecast."
+    >
+
+    <title>Weather Dashboard | Real-Time Weather</title>
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Weather Icons CSS -->
+    <link rel="stylesheet" href="css/weather-icons.css">
+
+    <!-- Responsive CSS -->
+    <link rel="stylesheet" href="css/responsive.css">
+
+</head>
+
+<body>
+
+    <!-- ============================= -->
+    <!-- BACKGROUND -->
+    <!-- ============================= -->
+
+    <div class="background-animation"></div>
+
+
+    <!-- ============================= -->
+    <!-- MAIN APPLICATION -->
+    <!-- ============================= -->
+
+    <main class="app-container">
+
+
+        <!-- ============================= -->
+        <!-- HEADER -->
+        <!-- ============================= -->
+
+        <header class="app-header">
+
+            <div class="logo">
+
+                <div class="logo-icon">
+                    🌤️
+                </div>
+
+                <div>
+                    <h1>Weather Dashboard</h1>
+
+                    <p>
+                        Real-time weather information
+                    </p>
+                </div>
+
+            </div>
+
+
+            <!-- Unit Toggle -->
+
+            <div class="header-actions">
+
+                <button
+                    id="unitToggle"
+                    class="unit-toggle"
+                    aria-label="Change temperature unit"
+                >
+                    °C
+                </button>
+
+                <button
+                    id="themeToggle"
+                    class="theme-toggle"
+                    aria-label="Toggle dark mode"
+                >
+                    🌙
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- ============================= -->
+        <!-- SEARCH SECTION -->
+        <!-- ============================= -->
+
+        <section class="search-section">
+
+            <div class="search-container">
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search city..."
+                    autocomplete="off"
+                >
+
+                <button
+                    id="searchButton"
+                    class="search-button"
+                >
+                    🔍 Search
+                </button>
+
+
+                <!-- Autocomplete Suggestions -->
+
+                <div
+                    id="suggestions"
+                    class="suggestions"
+                ></div>
+
+            </div>
+
+
+            <!-- Location Button -->
+
+            <button
+                id="locationButton"
+                class="location-button"
+            >
+                📍 Use My Location
+            </button>
+
+        </section>
+
+
+        <!-- ============================= -->
+        <!-- LOADING STATE -->
+        <!-- ============================= -->
+
+        <section
+            id="loading"
+            class="loading hidden"
+        >
+
+            <div class="loader"></div>
+
+            <p>
+                Fetching weather data...
+            </p>
+
+        </section>
+
+
+        <!-- ============================= -->
+        <!-- ERROR STATE -->
+        <!-- ============================= -->
+
+        <section
+            id="errorMessage"
+            class="error-message hidden"
+        >
+
+            <div class="error-icon">
+                ⚠️
+            </div>
+
+            <h2>
+                Something went wrong
+            </h2>
+
+            <p id="errorText">
+                Unable to fetch weather data.
+            </p>
+
+            <button
+                id="retryButton"
+                class="retry-button"
+            >
+                Try Again
+            </button>
+
+        </section>
+
+
+        <!-- ============================= -->
+        <!-- WEATHER CONTENT -->
+        <!-- ============================= -->
+
+        <div
+            id="weatherContent"
+            class="weather-content"
+        >
+
+
+            <!-- ============================= -->
+            <!-- CURRENT WEATHER -->
+            <!-- ============================= -->
+
+            <section
+                id="currentWeather"
+                class="current-weather-card"
+            >
+
+                <!-- Weather data will be inserted using JavaScript -->
+
+                <div class="default-weather">
+
+                    <div class="default-icon">
+                        🌤️
+                    </div>
+
+                    <h2>
+                        Search for a city
+                    </h2>
+
+                    <p>
+                        Enter a city name to see current weather information.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- ============================= -->
+            <!-- WEATHER DETAILS -->
+            <!-- ============================= -->
+
+            <section
+                id="weatherDetails"
+                class="weather-details-section hidden"
+            >
+
+                <h2>
+                    Weather Details
+                </h2>
+
+                <div class="details-grid">
+
+
+                    <div class="detail-card">
+
+                        <div class="detail-icon">
+                            💧
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Humidity
+                            </span>
+
+                            <strong id="humidity">
+                                --
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="detail-card">
+
+                        <div class="detail-icon">
+                            💨
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Wind Speed
+                            </span>
+
+                            <strong id="windSpeed">
+                                --
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="detail-card">
+
+                        <div class="detail-icon">
+                            🌡️
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Feels Like
+                            </span>
+
+                            <strong id="feelsLike">
+                                --
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="detail-card">
+
+                        <div class="detail-icon">
+                            🔽
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Pressure
+                            </span>
+
+                            <strong id="pressure">
+                                --
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="detail-card">
+
+                        <div class="detail-icon">
+                            👁️
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Visibility
+                            </span>
+
+                            <strong id="visibility">
+                                --
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="detail-card">
+
+                        <div class="detail-icon">
+                            🌅
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Sunrise
+                            </span>
+
+                            <strong id="sunrise">
+                                --
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+            <!-- ============================= -->
+            <!-- FORECAST -->
+            <!-- ============================= -->
+
+            <section
+                id="forecastSection"
+                class="forecast-section hidden"
+            >
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>
+                            5-Day Forecast
+                        </h2>
+
+                        <p>
+                            Weather forecast for the upcoming days
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="forecast"
+                    class="forecast-container"
+                >
+
+                    <!-- Forecast cards inserted using JavaScript -->
+
+                </div>
+
+            </section>
+
+
+            <!-- ============================= -->
+            <!-- FAVORITE CITIES -->
+            <!-- ============================= -->
+
+            <section
+                id="favoritesSection"
+                class="favorites-section"
+            >
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>
+                            ⭐ Favorite Cities
+                        </h2>
+
+                        <p>
+                            Quickly check weather in your favorite cities
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="favorites"
+                    class="favorites-container"
+                >
+
+                    <p class="empty-message">
+                        No favorite cities added yet.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- ============================= -->
+            <!-- SEARCH HISTORY -->
+            <!-- ============================= -->
+
+            <section
+                id="historySection"
+                class="history-section"
+            >
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>
+                            🕒 Recent Searches
+                        </h2>
+
+                    </div>
+
+
+                    <button
+                        id="clearHistory"
+                        class="clear-button"
+                    >
+                        Clear History
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="searchHistory"
+                    class="history-container"
+                >
+
+                    <p class="empty-message">
+                        No recent searches.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+        </div>
+
+
+        <!-- ============================= -->
+        <!-- FOOTER -->
+        <!-- ============================= -->
+
+        <footer class="app-footer">
+
+            <p>
+                🌤️ Weather Dashboard
+                <span>•</span>
+                Built with HTML, CSS & JavaScript
+            </p>
+
+            <p class="footer-info">
+
+                Powered by Weather API
+
+                <span id="lastUpdated">
+                    • Waiting for weather data
+                </span>
+
+            </p>
+
+        </footer>
+
+
+    </main>
+
+
+    <!-- ============================= -->
+    <!-- JAVASCRIPT FILES -->
+    <!-- ============================= -->
+
+    <!-- Configuration -->
+    <script src="js/config.js"></script>
+
+    <!-- Storage -->
+    <script src="js/storage.js"></script>
+
+    <!-- Weather API Service -->
+    <script src="js/weatherService.js"></script>
+
+    <!-- UI -->
+    <script src="js/ui.js"></script>
+
+    <!-- Main Application -->
+    <script src="js/app.js"></script>
+
+
+</body>
+</html>

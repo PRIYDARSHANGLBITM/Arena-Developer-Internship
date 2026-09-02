@@ -1,0 +1,1009 @@
+/* =========================================
+   GLOBAL RESET
+========================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* =========================================
+   ROOT VARIABLES
+========================================= */
+
+:root {
+    --primary: #4f46e5;
+    --primary-dark: #3730a3;
+    --secondary: #06b6d4;
+
+    --background: #eef2ff;
+    --card-background: rgba(255, 255, 255, 0.85);
+
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+
+    --border: rgba(148, 163, 184, 0.25);
+
+    --shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+
+    --radius-large: 24px;
+    --radius-medium: 16px;
+    --radius-small: 10px;
+}
+
+
+/* =========================================
+   BODY
+========================================= */
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+
+    min-height: 100vh;
+
+    background: linear-gradient(
+        135deg,
+        #c7d2fe,
+        #e0f2fe,
+        #f5f3ff
+    );
+
+    color: var(--text-primary);
+
+    overflow-x: hidden;
+}
+
+
+/* =========================================
+   BACKGROUND ANIMATION
+========================================= */
+
+.background-animation {
+    position: fixed;
+
+    width: 500px;
+    height: 500px;
+
+    background: rgba(79, 70, 229, 0.15);
+
+    border-radius: 50%;
+
+    filter: blur(100px);
+
+    top: -200px;
+    left: -150px;
+
+    z-index: -1;
+
+    animation: floatBackground 12s infinite alternate ease-in-out;
+}
+
+
+@keyframes floatBackground {
+
+    from {
+        transform: translate(0, 0);
+    }
+
+    to {
+        transform: translate(300px, 150px);
+    }
+}
+
+
+/* =========================================
+   MAIN CONTAINER
+========================================= */
+
+.app-container {
+    width: min(1200px, 92%);
+
+    margin: auto;
+
+    padding: 30px 0 50px;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.app-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 35px;
+}
+
+
+.logo {
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+}
+
+
+.logo-icon {
+    font-size: 48px;
+
+    animation: weatherFloat 3s infinite ease-in-out;
+}
+
+
+@keyframes weatherFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+
+.logo h1 {
+    font-size: 28px;
+
+    font-weight: 700;
+}
+
+
+.logo p {
+    margin-top: 5px;
+
+    color: var(--text-secondary);
+
+    font-size: 14px;
+}
+
+
+/* =========================================
+   HEADER BUTTONS
+========================================= */
+
+.header-actions {
+    display: flex;
+
+    gap: 12px;
+}
+
+
+.unit-toggle,
+.theme-toggle {
+    width: 48px;
+    height: 48px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.8);
+
+    cursor: pointer;
+
+    font-size: 18px;
+
+    box-shadow: var(--shadow);
+
+    transition: 0.3s;
+}
+
+
+.unit-toggle:hover,
+.theme-toggle:hover {
+    transform: translateY(-3px);
+
+    background: var(--primary);
+
+    color: white;
+}
+
+
+/* =========================================
+   SEARCH SECTION
+========================================= */
+
+.search-section {
+    display: flex;
+
+    gap: 15px;
+
+    align-items: center;
+
+    margin-bottom: 35px;
+}
+
+
+.search-container {
+    flex: 1;
+
+    position: relative;
+
+    display: flex;
+
+    background: rgba(255, 255, 255, 0.85);
+
+    border-radius: var(--radius-medium);
+
+    padding: 6px;
+
+    box-shadow: var(--shadow);
+}
+
+
+#searchInput {
+    flex: 1;
+
+    border: none;
+
+    outline: none;
+
+    padding: 15px 18px;
+
+    font-size: 16px;
+
+    background: transparent;
+
+    color: var(--text-primary);
+}
+
+
+.search-button {
+    border: none;
+
+    padding: 12px 22px;
+
+    border-radius: 12px;
+
+    background: var(--primary);
+
+    color: white;
+
+    font-size: 15px;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+
+.search-button:hover {
+    background: var(--primary-dark);
+
+    transform: scale(1.03);
+}
+
+
+/* =========================================
+   LOCATION BUTTON
+========================================= */
+
+.location-button {
+    border: none;
+
+    padding: 16px 20px;
+
+    border-radius: var(--radius-medium);
+
+    background: var(--secondary);
+
+    color: white;
+
+    cursor: pointer;
+
+    font-size: 15px;
+
+    box-shadow: var(--shadow);
+
+    transition: 0.3s;
+}
+
+
+.location-button:hover {
+    transform: translateY(-3px);
+
+    opacity: 0.9;
+}
+
+
+/* =========================================
+   SUGGESTIONS
+========================================= */
+
+.suggestions {
+    position: absolute;
+
+    top: calc(100% + 8px);
+
+    left: 0;
+
+    width: 100%;
+
+    background: white;
+
+    border-radius: 14px;
+
+    box-shadow: var(--shadow);
+
+    overflow: hidden;
+
+    z-index: 100;
+}
+
+
+.suggestion-item {
+    padding: 14px 18px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.suggestion-item:hover {
+    background: #eef2ff;
+}
+
+
+/* =========================================
+   WEATHER CONTENT
+========================================= */
+
+.weather-content {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 30px;
+}
+
+
+/* =========================================
+   CURRENT WEATHER CARD
+========================================= */
+
+.current-weather-card {
+    min-height: 320px;
+
+    padding: 40px;
+
+    border-radius: var(--radius-large);
+
+    background: linear-gradient(
+        135deg,
+        #4f46e5,
+        #06b6d4
+    );
+
+    color: white;
+
+    box-shadow: var(--shadow);
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+
+.current-weather-card::before {
+    content: "";
+
+    position: absolute;
+
+    width: 300px;
+    height: 300px;
+
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.1);
+
+    top: -150px;
+    right: -100px;
+}
+
+
+/* =========================================
+   DEFAULT WEATHER
+========================================= */
+
+.default-weather {
+    height: 240px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    text-align: center;
+
+    position: relative;
+
+    z-index: 2;
+}
+
+
+.default-icon {
+    font-size: 80px;
+
+    margin-bottom: 20px;
+}
+
+
+.default-weather h2 {
+    font-size: 30px;
+
+    margin-bottom: 10px;
+}
+
+
+.default-weather p {
+    opacity: 0.85;
+}
+
+
+/* =========================================
+   CURRENT WEATHER DYNAMIC CONTENT
+========================================= */
+
+.weather-location {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    position: relative;
+
+    z-index: 2;
+}
+
+
+.weather-city {
+    font-size: 32px;
+
+    font-weight: bold;
+}
+
+
+.weather-date {
+    margin-top: 8px;
+
+    opacity: 0.85;
+}
+
+
+.favorite-button {
+    border: none;
+
+    background: rgba(255, 255, 255, 0.2);
+
+    color: white;
+
+    font-size: 24px;
+
+    width: 48px;
+    height: 48px;
+
+    border-radius: 50%;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+
+.favorite-button:hover {
+    transform: scale(1.1);
+
+    background: rgba(255, 255, 255, 0.35);
+}
+
+
+.weather-main {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-top: 40px;
+
+    position: relative;
+
+    z-index: 2;
+}
+
+
+.temperature {
+    font-size: 80px;
+
+    font-weight: bold;
+
+    line-height: 1;
+}
+
+
+.weather-condition {
+    text-align: right;
+}
+
+
+.weather-icon {
+    font-size: 70px;
+
+    display: block;
+
+    margin-bottom: 10px;
+}
+
+
+.condition-text {
+    font-size: 18px;
+
+    text-transform: capitalize;
+}
+
+
+/* =========================================
+   WEATHER DETAILS
+========================================= */
+
+.weather-details-section,
+.forecast-section,
+.favorites-section,
+.history-section {
+    background: var(--card-background);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius-large);
+
+    padding: 30px;
+
+    box-shadow: var(--shadow);
+
+    backdrop-filter: blur(10px);
+}
+
+
+.weather-details-section h2,
+.forecast-section h2,
+.favorites-section h2,
+.history-section h2 {
+    margin-bottom: 25px;
+}
+
+
+.details-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(180px, 1fr));
+
+    gap: 18px;
+}
+
+
+.detail-card {
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 18px;
+
+    border-radius: var(--radius-medium);
+
+    background: rgba(255, 255, 255, 0.7);
+
+    transition: 0.3s;
+}
+
+
+.detail-card:hover {
+    transform: translateY(-5px);
+
+    box-shadow: var(--shadow);
+}
+
+
+.detail-icon {
+    font-size: 30px;
+}
+
+
+.detail-card span {
+    display: block;
+
+    font-size: 13px;
+
+    color: var(--text-secondary);
+
+    margin-bottom: 5px;
+}
+
+
+.detail-card strong {
+    font-size: 17px;
+}
+
+
+/* =========================================
+   SECTION HEADER
+========================================= */
+
+.section-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 25px;
+}
+
+
+.section-header p {
+    color: var(--text-secondary);
+
+    margin-top: 5px;
+}
+
+
+/* =========================================
+   FORECAST
+========================================= */
+
+.forecast-container {
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    gap: 15px;
+}
+
+
+.forecast-day {
+    padding: 20px 12px;
+
+    border-radius: var(--radius-medium);
+
+    background: rgba(255, 255, 255, 0.7);
+
+    text-align: center;
+
+    transition: 0.3s;
+}
+
+
+.forecast-day:hover {
+    transform: translateY(-6px);
+
+    box-shadow: var(--shadow);
+}
+
+
+.day-name {
+    font-weight: bold;
+
+    margin-bottom: 15px;
+}
+
+
+.forecast-icon {
+    font-size: 38px;
+
+    margin-bottom: 12px;
+}
+
+
+.forecast-temp {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    margin-bottom: 8px;
+}
+
+
+.temp-max {
+    font-weight: bold;
+}
+
+
+.temp-min {
+    color: var(--text-secondary);
+}
+
+
+.forecast-condition {
+    font-size: 12px;
+
+    color: var(--text-secondary);
+
+    text-transform: capitalize;
+}
+
+
+/* =========================================
+   FAVORITES
+========================================= */
+
+.favorites-container,
+.history-container {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 12px;
+}
+
+
+.favorite-city,
+.history-city {
+    border: none;
+
+    padding: 12px 18px;
+
+    border-radius: 30px;
+
+    background: #eef2ff;
+
+    color: var(--primary);
+
+    cursor: pointer;
+
+    font-weight: 600;
+
+    transition: 0.3s;
+}
+
+
+.favorite-city:hover,
+.history-city:hover {
+    background: var(--primary);
+
+    color: white;
+
+    transform: translateY(-3px);
+}
+
+
+.empty-message {
+    color: var(--text-secondary);
+
+    font-size: 14px;
+}
+
+
+/* =========================================
+   CLEAR BUTTON
+========================================= */
+
+.clear-button {
+    border: none;
+
+    background: transparent;
+
+    color: #ef4444;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+    font-weight: bold;
+}
+
+
+.clear-button:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================
+   LOADING
+========================================= */
+
+.loading {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 50px;
+
+    gap: 20px;
+}
+
+
+.loader {
+    width: 55px;
+    height: 55px;
+
+    border-radius: 50%;
+
+    border: 5px solid #e2e8f0;
+
+    border-top-color: var(--primary);
+
+    animation: spin 1s linear infinite;
+}
+
+
+@keyframes spin {
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* =========================================
+   ERROR MESSAGE
+========================================= */
+
+.error-message {
+    text-align: center;
+
+    background: rgba(255, 255, 255, 0.85);
+
+    padding: 50px;
+
+    border-radius: var(--radius-large);
+
+    box-shadow: var(--shadow);
+}
+
+
+.error-icon {
+    font-size: 60px;
+
+    margin-bottom: 15px;
+}
+
+
+.error-message h2 {
+    margin-bottom: 10px;
+}
+
+
+.error-message p {
+    color: var(--text-secondary);
+
+    margin-bottom: 20px;
+}
+
+
+.retry-button {
+    border: none;
+
+    background: var(--primary);
+
+    color: white;
+
+    padding: 12px 25px;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+
+.retry-button:hover {
+    background: var(--primary-dark);
+}
+
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.app-footer {
+    text-align: center;
+
+    margin-top: 45px;
+
+    color: var(--text-secondary);
+
+    font-size: 14px;
+}
+
+
+.app-footer p {
+    margin: 8px 0;
+}
+
+
+.footer-info {
+    font-size: 12px;
+}
+
+
+/* =========================================
+   UTILITY CLASS
+========================================= */
+
+.hidden {
+    display: none !important;
+}
+
+
+/* =========================================
+   DARK MODE
+========================================= */
+
+body.dark-mode {
+    --background: #0f172a;
+
+    --card-background: rgba(30, 41, 59, 0.85);
+
+    --text-primary: #f1f5f9;
+
+    --text-secondary: #94a3b8;
+
+    --border: rgba(148, 163, 184, 0.15);
+
+    background: linear-gradient(
+        135deg,
+        #0f172a,
+        #111827,
+        #1e293b
+    );
+}
+
+
+body.dark-mode .search-container,
+body.dark-mode .unit-toggle,
+body.dark-mode .theme-toggle {
+    background: #1e293b;
+}
+
+
+body.dark-mode #searchInput {
+    color: white;
+}
+
+
+body.dark-mode .detail-card,
+body.dark-mode .forecast-day {
+    background: rgba(51, 65, 85, 0.7);
+}
+
+
+body.dark-mode .favorite-city,
+body.dark-mode .history-city {
+    background: #334155;
+
+    color: #c7d2fe;
+}
+
+
+body.dark-mode .suggestions {
+    background: #1e293b;
+}
+
+
+body.dark-mode .suggestion-item:hover {
+    background: #334155;
+}

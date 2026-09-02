@@ -1,0 +1,245 @@
+/* =========================================
+   WEATHER ICON STYLES
+========================================= */
+
+/*
+   This file provides animations and styling
+   for weather emoji/icons used in the application.
+*/
+
+
+/* =========================================
+   GENERAL WEATHER ICON
+========================================= */
+
+.weather-icon {
+    display: inline-block;
+
+    font-size: 70px;
+
+    line-height: 1;
+
+    animation: weatherIconFloat 3s ease-in-out infinite;
+}
+
+
+/* =========================================
+   FLOAT ANIMATION
+========================================= */
+
+@keyframes weatherIconFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+
+/* =========================================
+   SUN
+========================================= */
+
+.icon-sunny {
+    display: inline-block;
+
+    animation: sunRotate 12s linear infinite;
+}
+
+
+@keyframes sunRotate {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* =========================================
+   CLOUD
+========================================= */
+
+.icon-cloudy {
+    display: inline-block;
+
+    animation: cloudMove 4s ease-in-out infinite alternate;
+}
+
+
+@keyframes cloudMove {
+
+    from {
+        transform: translateX(-5px);
+    }
+
+    to {
+        transform: translateX(5px);
+    }
+}
+
+
+/* =========================================
+   RAIN
+========================================= */
+
+.icon-rainy {
+    display: inline-block;
+
+    animation: rainShake 2s ease-in-out infinite;
+}
+
+
+@keyframes rainShake {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(5px);
+    }
+}
+
+
+/* =========================================
+   SNOW
+========================================= */
+
+.icon-snowy {
+    display: inline-block;
+
+    animation: snowFloat 3s ease-in-out infinite;
+}
+
+
+@keyframes snowFloat {
+
+    0% {
+        transform: translateY(-5px);
+    }
+
+    50% {
+        transform: translateY(5px);
+    }
+
+    100% {
+        transform: translateY(-5px);
+    }
+}
+
+
+/* =========================================
+   THUNDERSTORM
+========================================= */
+
+.icon-storm {
+    display: inline-block;
+
+    animation: stormFlash 1.5s infinite;
+}
+
+
+@keyframes stormFlash {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.12);
+    }
+}
+
+
+/* =========================================
+   FORECAST ICONS
+========================================= */
+
+.forecast-icon {
+    display: inline-block;
+
+    font-size: 40px;
+
+    line-height: 1;
+
+    margin: 10px 0;
+
+    transition: transform 0.3s ease;
+}
+
+
+.forecast-day:hover .forecast-icon {
+    transform: scale(1.2) rotate(5deg);
+}
+
+
+/* =========================================
+   WEATHER CONDITION COLORS
+   (Optional visual enhancements)
+========================================= */
+
+.weather-sunny {
+    text-shadow: 0 0 20px rgba(255, 193, 7, 0.45);
+}
+
+
+.weather-cloudy {
+    text-shadow: 0 0 20px rgba(148, 163, 184, 0.4);
+}
+
+
+.weather-rainy {
+    text-shadow: 0 0 20px rgba(59, 130, 246, 0.45);
+}
+
+
+.weather-storm {
+    text-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+}
+
+
+/* =========================================
+   SMALL WEATHER ICONS
+========================================= */
+
+.small-weather-icon {
+    font-size: 28px;
+
+    display: inline-block;
+
+    vertical-align: middle;
+}
+
+
+/* =========================================
+   WEATHER STATUS ANIMATION
+========================================= */
+
+.weather-status-icon {
+    display: inline-block;
+
+    animation: pulseWeather 2s infinite ease-in-out;
+}
+
+
+@keyframes pulseWeather {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.08);
+    }
+}
