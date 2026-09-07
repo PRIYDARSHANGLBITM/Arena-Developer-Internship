@@ -1,456 +1,95 @@
+/* ===== WeatherService ===== */
 class WeatherService {
+  constructor(cfg, store) {
+    this.cfg = cfg || window.SKYCAST_CONFIG;
+    this.store = store;
+  }
 
-    constructor() {
-
-        this.apiKey = CONFIG.API_KEY;
-
-        this.baseUrl = CONFIG.BASE_URL;
-
-        // Cache valid for 10 minutes
-        this.cacheDuration = 10 * 60 * 1000;
+  async _fetch(url, signal) {
+    try {
+      const controller = new AbortController();
+      if (signal) {
+        signal.addEventListener('abort', () => controller.abort());
+      }
+      const timeoutId = setTimeout(() => controller.abort(), this.cfg.REQUEST_TIMEOUT_MS);
+      const res = await fetch(url, { signal: controller.signal });
+      clearTimeout(timeoutId);
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || `Request failed (${res.status})`);
+      }
+      return data;
+    } catch (err) {
+      throw err;
     }
+  }
 
-
-    // =====================================
-    // VALIDATE API KEY
-    // =====================================
-
-    validateApiKey() {
-
-        if (
-            !this.apiKey ||
-            this.apiKey.trim() === "" ||
-            this.apiKey === "PASTE_YOUR_OPENWEATHER_API_KEY_HERE"
-        ) {
-
-            throw new Error(
-                "Please add your OpenWeather API Key in config.js"
-            );
-        }
+  async _cached(cacheKey, fetcher, ttl) {
+    const c = this.store?.getCache(cacheKey);
+    if (c) return c;
+    try {
+      const data = await fetcher();
+      if (data && !data.cod) {
+        this.store?.setCache(cacheKey, data, ttl);
+      }
+      return data;
+    } catch (err) {
+      throw err;
     }
+  }
 
-
-    // =====================================
-    // GET CURRENT WEATHER BY CITY
-    // =====================================
-
-    async getCurrentWeather(city) {
-
-        this.validateApiKey();
-
-        const cleanCity = city.trim();
-
-        const cacheKey =
-            `weather_current_${cleanCity.toLowerCase()}`;
-
-        const cachedData =
-            this.getFromCache(cacheKey);
-
-        if (cachedData) {
-
-            console.log(
-                "Current weather loaded from cache"
-            );
-
-            return cachedData;
-        }
-
-
-        const url =
-            `${this.baseUrl}/weather` +
-            `?q=${encodeURIComponent(cleanCity)}` +
-            `&appid=${this.apiKey}` +
-            `&units=metric`;
-
-
-        try {
-
-            const response =
-                await fetch(url);
-
-
-            if (!response.ok) {
-
-                if (response.status === 404) {
-
-                    throw new Error(
-                        "City not found. Please try again."
-                    );
-                }
-
-
-                if (response.status === 401) {
-
-                    throw new Error(
-                        "Invalid API Key. Please check config.js"
-                    );
-                }
-
-
-                throw new Error(
-                    `Weather API Error: ${response.status}`
-                );
-            }
-
-
-            const data =
-                await response.json();
-
-
-            this.saveToCache(
-                cacheKey,
-                data
-            );
-
-
-            return data;
-
-        } catch (error) {
-
-            console.error(
-                "Current Weather Error:",
-                error
-            );
-
-            throw error;
-        }
+  async getCurrentByCity(city, units = "metric") {
+    const url = `${this.cfg.BASE_URL}/weather?q=${encodeURIComponent(city)}&appid=${this.cfg.API_KEY}&units=${units}`;
+    return this._cached(`cur:${city}:${units}`, () => this._fetch(url));
+  }
+  async getForecastByCity(city, units = "metric") {
+    const url = `${this.cfg.BASE_URL}/forecast?q=${encodeURIComponent(city)}&appid=${this.cfg.API_KEY}&units=${units}`;
+    return this._cached(`fc:${city}:${units}`, () => this._fetch(url));
+  }
+  async getCurrentByCoords(lat, lon, units = "metric") {
+    const url = `${this.cfg.BASE_URL}/weather?lat=${lat}&lon=${lon}&appid=${this.cfg.API_KEY}&units=${units}`;
+    return this._cached(`cur:${lat},${lon}:${units}`, () => this._fetch(url));
+  }
+  async getForecastByCoords(lat, lon, units = "metric") {
+    const url = `${this.cfg.BASE_URL}/forecast?lat=${lat}&lon=${lon}&appid=${this.cfg.API_KEY}&units=${units}`;
+    return this._cached(`fc:${lat},${lon}:${units}`, () => this._fetch(url));
+  }
+  async searchCities(query, limit = 5, signal) {
+    if (!query || query.length < 2) return [];
+    const cacheKey = `geo:${query}:${limit}`;
+    const cached = this.store?.getCache(cacheKey);
+    if (cached) return cached;
+    const url = `${this.cfg.GEO_URL}/direct?q=${encodeURIComponent(query)}&limit=${limit}&appid=${this.cfg.API_KEY}`;
+    try {
+      const data = await this._fetch(url, signal);
+      if (data) this.store?.setCache(cacheKey, data, 30000);
+      return data;
+    } catch (err) {
+      throw err;
     }
+  }
 
-
-    // =====================================
-    // GET 5 DAY FORECAST BY CITY
-    // =====================================
-
-    async getForecast(city) {
-
-        this.validateApiKey();
-
-        const cleanCity = city.trim();
-
-        const cacheKey =
-            `weather_forecast_${cleanCity.toLowerCase()}`;
-
-        const cachedData =
-            this.getFromCache(cacheKey);
-
-
-        if (cachedData) {
-
-            console.log(
-                "Forecast loaded from cache"
-            );
-
-            return cachedData;
-        }
-
-
-        const url =
-            `${this.baseUrl}/forecast` +
-            `?q=${encodeURIComponent(cleanCity)}` +
-            `&appid=${this.apiKey}` +
-            `&units=metric`;
-
-
-        try {
-
-            const response =
-                await fetch(url);
-
-
-            if (!response.ok) {
-
-                if (response.status === 404) {
-
-                    throw new Error(
-                        "Forecast not found for this city."
-                    );
-                }
-
-
-                if (response.status === 401) {
-
-                    throw new Error(
-                        "Invalid API Key. Please check config.js"
-                    );
-                }
-
-
-                throw new Error(
-                    "Unable to load forecast data."
-                );
-            }
-
-
-            const data =
-                await response.json();
-
-
-            this.saveToCache(
-                cacheKey,
-                data
-            );
-
-
-            return data;
-
-        } catch (error) {
-
-            console.error(
-                "Forecast Error:",
-                error
-            );
-
-            throw error;
-        }
+  async loadAll({ city, coords, units }) {
+    try {
+      if (city) {
+        const [current, forecast] = await Promise.all([
+          this.getCurrentByCity(city, units),
+          this.getForecastByCity(city, units)
+        ]);
+        return { current, forecast };
+      } else if (coords) {
+        const [current, forecast] = await Promise.all([
+          this.getCurrentByCoords(coords.lat, coords.lon, units),
+          this.getForecastByCoords(coords.lat, coords.lon, units)
+        ]);
+        return { current, forecast };
+      }
+    } catch (err) {
+      console.error("Error loading weather data:", err);
+      throw err;
     }
-
-
-    // =====================================
-    // GET WEATHER BY COORDINATES
-    // =====================================
-
-    async getWeatherByCoordinates(lat, lon) {
-
-        this.validateApiKey();
-
-
-        const url =
-            `${this.baseUrl}/weather` +
-            `?lat=${lat}` +
-            `&lon=${lon}` +
-            `&appid=${this.apiKey}` +
-            `&units=metric`;
-
-
-        try {
-
-            const response =
-                await fetch(url);
-
-
-            if (!response.ok) {
-
-                if (response.status === 401) {
-
-                    throw new Error(
-                        "Invalid API Key. Please check config.js"
-                    );
-                }
-
-
-                throw new Error(
-                    "Unable to get weather for your location."
-                );
-            }
-
-
-            return await response.json();
-
-        } catch (error) {
-
-            console.error(
-                "Location Weather Error:",
-                error
-            );
-
-            throw error;
-        }
-    }
-
-
-    // =====================================
-    // GET FORECAST BY COORDINATES
-    // =====================================
-
-    async getForecastByCoordinates(lat, lon) {
-
-        this.validateApiKey();
-
-
-        const url =
-            `${this.baseUrl}/forecast` +
-            `?lat=${lat}` +
-            `&lon=${lon}` +
-            `&appid=${this.apiKey}` +
-            `&units=metric`;
-
-
-        try {
-
-            const response =
-                await fetch(url);
-
-
-            if (!response.ok) {
-
-                if (response.status === 401) {
-
-                    throw new Error(
-                        "Invalid API Key. Please check config.js"
-                    );
-                }
-
-
-                throw new Error(
-                    "Unable to get forecast for your location."
-                );
-            }
-
-
-            return await response.json();
-
-        } catch (error) {
-
-            console.error(
-                "Location Forecast Error:",
-                error
-            );
-
-            throw error;
-        }
-    }
-
-
-    // =====================================
-    // SAVE DATA TO CACHE
-    // =====================================
-
-    saveToCache(key, data) {
-
-        try {
-
-            const cacheData = {
-
-                timestamp: Date.now(),
-
-                data: data
-            };
-
-
-            localStorage.setItem(
-                key,
-                JSON.stringify(cacheData)
-            );
-
-        } catch (error) {
-
-            console.warn(
-                "Unable to save cache:",
-                error
-            );
-        }
-    }
-
-
-    // =====================================
-    // GET DATA FROM CACHE
-    // =====================================
-
-    getFromCache(key) {
-
-        try {
-
-            const cached =
-                localStorage.getItem(key);
-
-
-            if (!cached) {
-
-                return null;
-            }
-
-
-            const cacheData =
-                JSON.parse(cached);
-
-
-            // Check cache structure
-            if (
-                !cacheData.timestamp ||
-                !cacheData.data
-            ) {
-
-                localStorage.removeItem(key);
-
-                return null;
-            }
-
-
-            const isValid =
-
-                Date.now() -
-                cacheData.timestamp
-                <
-                this.cacheDuration;
-
-
-            if (isValid) {
-
-                return cacheData.data;
-            }
-
-
-            // Remove expired cache
-            localStorage.removeItem(key);
-
-
-            return null;
-
-        } catch (error) {
-
-            console.warn(
-                "Cache Error:",
-                error
-            );
-
-            return null;
-        }
-    }
-
-
-    // =====================================
-    // CLEAR WEATHER CACHE
-    // =====================================
-
-    clearCache() {
-
-        const keys = [];
-
-
-        for (
-            let i = 0;
-            i < localStorage.length;
-            i++
-        ) {
-
-            const key =
-                localStorage.key(i);
-
-
-            if (
-                key &&
-                key.startsWith("weather_")
-            ) {
-
-                keys.push(key);
-            }
-        }
-
-
-        keys.forEach(key => {
-
-            localStorage.removeItem(key);
-
-        });
-
-
-        console.log(
-            "Weather cache cleared"
-        );
-    }
-
+    return { current: null, forecast: null };
+  }
 }
 
-
-const weatherService =
-    new WeatherService();
+window.weatherService = new WeatherService(window.SKYCAST_CONFIG, window.storage || {});
