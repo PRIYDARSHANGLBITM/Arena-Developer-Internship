@@ -2,19 +2,61 @@ package com.blogapi.model.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import jakarta.validation.constraints.Size;
 
-@Data
 public class PostRequest {
-    @NotBlank(message = "Title is mandatory")
+
+    @NotBlank(message = "Title is required")
+    @Size(max = 255, message = "Title must not exceed 255 characters")
     private String title;
 
-    @NotBlank(message = "Content is mandatory")
+    @NotBlank(message = "Content is required")
     private String content;
 
-    @NotBlank(message = "Author is mandatory")
+    @NotBlank(message = "Author is required")
     private String author;
 
-    @NotNull(message = "Category ID is mandatory")
+    @NotNull(message = "Category ID is required")
     private Long categoryId;
+
+    public PostRequest() {}
+
+    public PostRequest(String title, String content, String author, Long categoryId) {
+        this.title = title;
+        this.content = content;
+        this.author = author;
+        this.categoryId = categoryId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
 }
